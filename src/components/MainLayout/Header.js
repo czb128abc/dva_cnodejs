@@ -2,6 +2,23 @@ import React from 'react';
 import { Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
 
+const routers = [{
+  url: '/good',
+  icon: 'home',
+  name: '精华'
+}, {
+  url: '/share',
+  icon: '',
+  name: '分享'
+}, {
+  url: '/ask',
+  icon: '',
+  name: '问答'
+}, {
+  url: '/job',
+  icon: '',
+  name: '招聘'
+}]
 function Header({ location }) {
   return (
     <Menu
@@ -21,6 +38,16 @@ function Header({ location }) {
       <Menu.Item key="/antd">
         <a href="https://github.com/dvajs/dva">dva</a>
       </Menu.Item>
+      {
+        routers.map(item => (
+          <Menu.Item key={item.url}>
+            <Link to={item.url}>
+              {item.icon && <Icon type={item.icon} />}
+              {item.name}
+            </Link>
+          </Menu.Item>
+        ))
+      }
     </Menu>
   );
 }

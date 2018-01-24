@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Switch, Route } from 'dva/router';
 import dynamic from 'dva/dynamic';
+import MainLayout from "./components/MainLayout/MainLayout";
 
 function RouterConfig({ history, app }) {
   const IndexPage = dynamic({
@@ -16,12 +17,22 @@ function RouterConfig({ history, app }) {
     component: () => import('./routes/Users'),
   });
 
+  const CnodeApp = dynamic({
+    app,
+    models: ()=> [
+      import('./models/cnodejs'),
+    ],
+    component: ()=> import('./routes/CnodeApp')
+  });
   return (
     <Router history={history}>
-      <Switch>
-        <Route exact path="/" component={IndexPage} />
-        <Route exact path="/users" component={Users} />
-      </Switch>
+      <MainLayout location={history.location}>
+        <Switch>
+          <Route exact path="/" component={IndexPage} />
+          <Route exact path="/users" component={Users} />
+          <Route exact path="/good" component={CnodeApp} />
+        </Switch>
+      </MainLayout>
     </Router>
   );
 }
