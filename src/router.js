@@ -1,7 +1,9 @@
 import React from 'react';
-import { Router, Switch, Route } from 'dva/router';
+import { HashRouter as Router, Switch, Route } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import MainLayout from "./components/MainLayout/MainLayout";
+
+const test = 1232;
 
 function RouterConfig({ history, app }) {
   const IndexPage = dynamic({
