@@ -2,6 +2,7 @@ import BaseChart from './BaseChart';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import versor from '../../utils/versor';
+import './WorldMap.less';
 
 export default class WorldMap extends BaseChart {
     componentDidMount() {
@@ -12,15 +13,16 @@ export default class WorldMap extends BaseChart {
         const svg  = this.getD3Svg();
         const path = d3.geoPath();
 
-        d3.json('https://d3js.org/us-10m.v1.json').then(us => {
-            svg.append('g').attr('class', 'states')
+        d3.json('https://unpkg.com/world-atlas@1/world/110m.json').then(us => {
+            svg.append('g')
+                .attr('class', 'states')
                 .selectAll('path')
-                .data(topojson.feature(us, us.objects.land).features)
+                .data(topojson.feature(us, us.objects.countries).features)
                 .enter().append("path")
                 .attr("d", path);
             svg.append("path")
                 .attr("class", "state-borders")
-                .attr("d", path(topojson.mesh(us, us.objects.states, function (a, b) { return a !== b; })));
+                .attr("d", path(topojson.mesh(us, us.objects.countries, function (a, b) { return a !== b; })));
             
             /**
             svg.append("g")
@@ -63,7 +65,7 @@ export default class WorldMap extends BaseChart {
             )
 
             const sphere = { type: 'Sphere' },
-                land = topojson.feature(world, world.objects.land);
+                land = topojson.feature(world, world.objects.countries);
             console.log('land', land)
 
             function render() {
