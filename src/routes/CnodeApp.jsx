@@ -1,5 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import D3Chart from '../components/d3/D3Chart';
 import { connect } from 'dva';
 
 import TopicList from '../components/cnodejs/TopicList';
@@ -7,22 +8,24 @@ import TopicList from '../components/cnodejs/TopicList';
 class CnodeApp extends React.Component {
 
   componentDidMount() {
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'cnodejs/queryTopicsByType',
-      payload: {tab: 'share'},
+      payload: { tab: 'share' },
     });
   }
 
   render() {
-    const {topicMap} = this.props;
+    const { topicMap } = this.props;
     const list = topicMap.share.list;
-    console.log('list',list);
-    return(
-      <TopicList
-        list={list}
-        key='share'
-      />
+    return (
+      <div>
+        <TopicList
+          list={list}
+          key='share'
+        />
+        <D3Chart />
+      </div>
     )
   }
 }
@@ -35,7 +38,7 @@ CnodeApp.propType = {
 
 const mapStateToProps = (state) => {
   const topicMap = state.cnodejs.topicMap;
-  return {topicMap};
+  return { topicMap };
 };
 
 export default connect(mapStateToProps)(CnodeApp)

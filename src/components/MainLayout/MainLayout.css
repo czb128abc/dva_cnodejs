@@ -14,3 +14,13 @@
   padding: 0 8px;
   flex: 1 0 auto;
 }
+
+.links line {
+  stroke: #aaa;
+}
+
+.nodes circle {
+  pointer-events: all;
+  stroke: none;
+  stroke-width: 40px;
+}

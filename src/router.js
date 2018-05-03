@@ -3,8 +3,6 @@ import { HashRouter as Router, Switch, Route } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import MainLayout from "./components/MainLayout/MainLayout";
 
-const test = 1232;
-
 function RouterConfig({ history, app }) {
   const IndexPage = dynamic({
     app,
@@ -33,6 +31,7 @@ function RouterConfig({ history, app }) {
           <Route exact path="/" component={IndexPage} />
           <Route exact path="/users" component={Users} />
           <Route exact path="/good" component={CnodeApp} />
+          <Route exact path="/d3" component={require('./routes/d3/index').default} />
         </Switch>
       </MainLayout>
     </Router>
