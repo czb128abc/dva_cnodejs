@@ -1,12 +1,20 @@
 .states :hover {
-    fill: red;
+  fill: red;
+}
+
+.state-borders {
+  fill: none;
+  stroke: green;
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.map-title-wrapper {
+  .map-title {
+    opacity: 0;
+    &:hover {
+      opacity: 1;
+    }
   }
-  
-  .state-borders {
-    fill: none;
-    stroke: green;
-    stroke-width: 0.5px;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-    pointer-events: none;
-  }
+}

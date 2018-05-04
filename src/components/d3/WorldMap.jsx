@@ -3,27 +3,60 @@ import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import versor from '../../utils/versor';
 import './WorldMap.less';
+import mapJson from '../../json/china';
+import { decodeEchartsGeoJson } from '../../utils/echarts';
 
+const worldJson = decodeEchartsGeoJson(mapJson);
+console.log('mapJson', mapJson)
+console.log('worldJson', worldJson)
 export default class WorldMap extends BaseChart {
     componentDidMount() {
         this.createCanvas();
         this.createSVG();
     }
     createSVG() {
-        const svg  = this.getD3Svg();
-        const path = d3.geoPath();
-
+        const height = 800, width = 1200;
+        const svg = this.getD3Svg(width, height);
+        const path = d3.geoPath().projection(d3.geoMercator().scale((height - 10) / 2));
+        const color = d3.scaleOrdinal(d3.schemeBlues[9]);
         d3.json('https://unpkg.com/world-atlas@1/world/110m.json').then(us => {
+            console.log('topojson.feature(us, us.objects.countries).features', topojson.feature(us, us.objects.countries).features)
             svg.append('g')
                 .attr('class', 'states')
                 .selectAll('path')
-                .data(topojson.feature(us, us.objects.countries).features)
+                .style('fill-opacity', 1)
+                .data(mapJson.features)
                 .enter().append("path")
-                .attr("d", path);
-            svg.append("path")
-                .attr("class", "state-borders")
-                .attr("d", path(topojson.mesh(us, us.objects.countries, function (a, b) { return a !== b; })));
-            
+                .attr("d", path)
+                .attr('fill', (d, i) => color(i))
+                .style('fill-opacity', 0)
+                .transition()
+                .duration(200)
+                .delay(function (d, i) {
+                    return i;
+                })
+                .style('fill-opacity', 1);
+            /**    
+            svg.append('g').attr('class', 'map-title-wrapper')
+                .selectAll('text')
+                .data(worldJson.features)
+                .enter()
+                .append('text')
+                .attr('class', 'map-title')
+                .text(function (d) { return d.properties.name; })
+                .attr('transform', function (d) {
+                    const centroid = path.centroid(d),
+                        x = centroid[0],
+                        y = centroid[1];
+                    return "translate(" + x + ", " + y + ")";
+                });
+            */
+
+            //  svg.append('point')   
+            // svg.append("path")
+            //     .attr("class", "state-borders")
+            //     .attr("d", path(topojson.mesh(us, us.objects.countries, function (a, b) { return a !== b; })));
+
             /**
             svg.append("g")
                 .attr("class", "states")
