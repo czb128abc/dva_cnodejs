@@ -7,9 +7,10 @@
     "buildw": "webpack-dev-server  --config ./dev-config/webpack.config.dev.js",
     "build:dll": "roadhog buildDll",
     "start:webpack": "cross-env NODE_ENV=development webpack-dev-server  --config ./dev-config/webpack.config.dev.js",
-    "build:webpack": "cross-env NODE_ENV=production webpack-dev-server  --config ./dev-config/webpack.config.dev.js",
+    "build:webpack": "cross-env npm run clean &&  NODE_ENV=production webpack  --config ./dev-config/webpack.config.prod.js",
     "test": "roadhog test",
     "lint": "eslint --ext .js src test",
+    "clean": "rm -rf ./build",
     "precommit": "lint-staged"
   },
   "lint-staged": {
@@ -60,6 +61,7 @@
     "json-loader": "^0.5.7",
     "less-loader": "^4.1.0",
     "lint-staged": "^7.0.4",
+    "mini-css-extract-plugin": "^0.4.1",
     "react-hot-loader": "^4.3.4",
     "redbox-react": "^1.5.0",
     "roadhog": "^2.0.0-0",
