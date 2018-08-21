@@ -6,7 +6,7 @@ import OrgChart from 'orgchart.js';
 import 'orgchart.js/src/orgchart.css';
 import AddModal from './components/AddModal';
 import * as utils from './utils';
-// import './css/vendor/font-awesome.min.css';
+import './css/vendor/font-awesome.min.css';
 import './style.less';
 const { confirm } = Modal;
 
