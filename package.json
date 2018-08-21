@@ -2,9 +2,9 @@
   "name": "dva-example-user-dashboard",
   "private": true,
   "scripts": {
-    "start": "roadhog server",
-    "build": "roadhog build",
-    "build:dll": "roadhog buildDll",
+    "start": "cross-env PORT=8000 ESLINT=none roadhog server",
+    "build": "cross-env NODE_ENV=production roadhog build",
+    "build:dll": "cross-env NODE_ENV=production roadhog buildDll",
     "test": "roadhog test",
     "lint": "eslint --ext .js src test",
     "precommit": "lint-staged"
@@ -22,8 +22,10 @@
     "dva": "^2.1.0-0",
     "dva-loading": "^0.3.0",
     "history": "^4.7.2",
+    "orgchart.js": "^0.0.4",
     "query-string": "^5.0.0",
-    "react": "^16.0.0",
+    "react": "^16.2.0",
+    "react-color": "^2.14.1",
     "react-dom": "^16.0.0",
     "topojson-client": "^3.0.0",
     "zrender": "^4.0.4"
@@ -33,6 +35,7 @@
     "babel-plugin-dva-hmr": "^0.4.0",
     "babel-plugin-import": "^1.1.0",
     "babel-plugin-transform-runtime": "^6.22.0",
+    "cross-env": "^5.2.0",
     "eslint": "^4.11.0",
     "eslint-config-af-react": "^0.3.0",
     "eslint-plugin-flowtype": "^2.34.1",
@@ -43,6 +46,6 @@
     "husky": "^0.13.0",
     "lint-staged": "^7.0.4",
     "redbox-react": "^1.5.0",
-    "roadhog": "^2.0.0-0"
+    "roadhog": "^2.4.4"
   }
 }

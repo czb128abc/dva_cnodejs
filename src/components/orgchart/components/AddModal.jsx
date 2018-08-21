@@ -1,0 +1,103 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Modal, Form, Input, Radio } from 'antd';
+
+const FormItem = Form.Item;
+
+class AddModal extends Component {
+    static propTypes = {
+        onSubmit: PropTypes.func.isRequired,
+        record: PropTypes.object.isRequired,
+        isRoot: PropTypes.bool.isRequired,
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            visible: false,
+        };
+    }
+
+    showModelHandler = (e) => {
+        if (e) e.stopPropagation();
+        this.setState({
+            visible: true,
+        });
+        this.props.form.resetFields();
+    };
+
+    hideModelHandler = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+    okHandler = async () => {
+        const { onSubmit } = this.props;
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                onSubmit(values);
+                this.hideModelHandler();
+            }
+        });
+        const delay = await setTimeout(() => { }, 2000);
+        return delay;
+    };
+
+    render() {
+        const { children } = this.props;
+        const { getFieldDecorator } = this.props.form;
+        const formItemLayout = {
+            labelCol: { span: 6 },
+            wrapperCol: { span: 14 },
+        };
+
+        return (
+            <span>
+                <span onClick={this.showModelHandler}>
+                    {children}
+                </span>
+                <Modal
+                    title="新建"
+                    visible={this.state.visible}
+                    onOk={this.okHandler}
+                    onCancel={this.hideModelHandler}
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Form layout="horizontal" onSubmit={this.okHandler}>
+                        <FormItem
+                            {...formItemLayout}
+                            label="父级角色"
+                        >
+                            {
+                                getFieldDecorator('nodeType', {
+                                    initialValue: 'Child',
+                                })(
+                                    <Radio.Group>
+                                        <Radio.Button value="Root">根节点</Radio.Button>
+                                        <Radio.Button value="Child">子节点</Radio.Button>
+                                        <Radio.Button value="Sibling">兄弟姐妹节点</Radio.Button>
+                                    </Radio.Group>,
+                                )
+                            }
+                        </FormItem>
+                        <FormItem
+                            {...formItemLayout}
+                            label="角色名称"
+                        >
+                            {
+                                getFieldDecorator('name', {
+                                    rules: [{ max: 128, message: '长度最多为128', required: true }],
+                                    initialValue: '',
+                                })(<Input />)
+                            }
+                        </FormItem>
+                    </Form>
+                </Modal>
+            </span>
+        );
+    }
+}
+
+export default Form.create()(AddModal);

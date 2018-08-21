@@ -2,6 +2,7 @@ import React from 'react';
 import { HashRouter as Router, Switch, Route } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import MainLayout from "./components/MainLayout/MainLayout";
+import Orgchart from './components/orgchart';
 
 function RouterConfig({ history, app }) {
   const IndexPage = dynamic({
@@ -19,10 +20,10 @@ function RouterConfig({ history, app }) {
 
   const CnodeApp = dynamic({
     app,
-    models: ()=> [
+    models: () => [
       import('./models/cnodejs'),
     ],
-    component: ()=> import('./routes/CnodeApp')
+    component: () => import('./routes/CnodeApp')
   });
   return (
     <Router history={history}>
@@ -30,6 +31,7 @@ function RouterConfig({ history, app }) {
         <Switch>
           <Route exact path="/" component={IndexPage} />
           <Route exact path="/users" component={Users} />
+          <Route exact path="/job" component={Orgchart} />
           <Route exact path="/good" component={CnodeApp} />
           <Route exact path="/d3" component={require('./routes/d3/index').default} />
         </Switch>
