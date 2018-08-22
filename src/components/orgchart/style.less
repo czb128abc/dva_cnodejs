@@ -1,14 +1,46 @@
-.orgchart {
-    ii.arrow-icon {
-        position: absolute;
-        left: 45%;
-        top: -6px;
-        font-weight: bold;
-        color: rgba(217, 83, 79, 0.8);
-    }
+.editable-orgchart-container {
+    .orgchart {
+        .arrow-icon {
+            position: absolute;
+            z-index: 10;
+            font-weight: bold;
+            height: 14px;
+            width: 14px;
+            color: rgba(217, 83, 79, 0.8);
+            left: 45%;
+            top: -6px;
+        }
 
-    &>table>tr:first-child .arrow-icon  {
-        display: none;
+        &.l2r .arrow-icon {
+            left: 37%;
+            top: -6px;
+        }
+        &.r2l {
+            right: 0;
+        }
+        &.r2l .arrow-icon {
+            left: 37%;
+            top: -6px;
+        }
+
+        .node:hover {
+            .arrow-icon {
+                display: none;
+            }
+        }
+        &>table>tr:first-child .arrow-icon  {
+            display: none;
+        }
+
+        .lines.hidden+.nodes > td > table > tr > td > .node .arrow-icon {
+            display: none;
+        }
+
+        .edge {
+            z-index: 100;
+        }
     }
 }
+
+
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { HashRouter as Router, Switch, Route } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import MainLayout from "./components/MainLayout/MainLayout";
-import Orgchart from './components/orgchart';
 
 function RouterConfig({ history, app }) {
   const IndexPage = dynamic({
@@ -31,7 +30,7 @@ function RouterConfig({ history, app }) {
         <Switch>
           <Route exact path="/" component={IndexPage} />
           <Route exact path="/users" component={Users} />
-          <Route exact path="/job" component={Orgchart} />
+          <Route exact path="/job" component={require('./components/orgchart').default} />
           <Route exact path="/good" component={CnodeApp} />
           <Route exact path="/d3" component={require('./routes/d3/index').default} />
         </Switch>

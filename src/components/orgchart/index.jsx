@@ -32,13 +32,14 @@ export default class EditableOrgChart extends PureComponent {
     }
     init() {
         const { orgChartData } = this.props;
-        const direction = 't2b';
+        const direction = 'r2l';
         console.log(this.refChartContainer)
         const org = new OrgChart({
             direction,
             chartContainer: `#${this.refChartContainer.id}`,
             data: orgChartData,
-            toggleSiblingsResp: true,
+            toggleSiblingsResp: false,
+            pan: true,
             nodeContent: 'title',
             nodeId: 'id',
             nodeTitle: 'name',
@@ -51,9 +52,9 @@ export default class EditableOrgChart extends PureComponent {
     createNode = (direction) => (node, data) => {
         const typeMap = {
             t2b: 'down',
-            b2t: 'up',
-            l2r: 'rigth',
-            r2l: 'left',
+            b2t: 'down',
+            l2r: 'down',
+            r2l: 'down',
         };
         const arrowIconDom = document.createElement('ii');
         arrowIconDom.setAttribute('class', `arrow-icon anticon anticon-${typeMap[direction]}`);
@@ -191,7 +192,7 @@ export default class EditableOrgChart extends PureComponent {
         const selectedNodeTitle = selectedNode ? selectedNode.title : '无';
         const disabled = !selectedNode;
         return (
-            <div className="orgchart-container">
+            <div className="editable-orgchart-container">
                 <Card
                     title="组织机构编辑"
                     cover={(<div>当前选中节点: {selectedNodeTitle}</div>)}
@@ -202,7 +203,7 @@ export default class EditableOrgChart extends PureComponent {
                             </AddModal>,
                             <TipIcon onClick={this.handleDelNode} disabled={disabled} type="delete" title="删除" />,
                             <TipIcon disabled={disabled} type="edit" title="编辑" />,
-                            <TipIcon onClick={this.handleShowColorPick} disabled={disabled} type="delete" title="更改选中节点颜色" />,
+                            <TipIcon onClick={this.handleShowColorPick} disabled={disabled} type="environment" title="更改选中节点颜色" />,
                         ]
                     }
                 >
@@ -249,7 +250,19 @@ const orgChartData = {
             id: '3', name: 'Hei Hei', title: 'senior engineer', relationship: '111',
         },
         {
-            id: '4', name: 'Tie Hua4', title: 'senior engineer', relationship: '110', color: "#2196f3"
+            id: '4', name: 'Tie Hua4', title: 'senior engineer', relationship: '110', color: "#2196f3",
+            children: [
+                {
+                    id: '41', name: 'Hei Hei41', title: 'senior engineer', relationship: '111',
+
+                    children: [
+                        {
+                            id: '411', name: 'Hei Hei411', title: 'senior engineer', relationship: '111',
+                        },
+
+                    ]
+                },
+            ]
         },
         {
             id: '5', name: 'Hei Hei5', title: 'senior engineer', relationship: '111',
