@@ -6,7 +6,7 @@ import { SwatchesPicker } from 'react-color';
 
 const FormItem = Form.Item;
 
-class AddModal extends Component {
+class EditModal extends Component {
     static propTypes = {
         onSubmit: PropTypes.func.isRequired,
         record: PropTypes.object.isRequired,
@@ -71,7 +71,7 @@ class AddModal extends Component {
                     {children}
                 </span>
                 <Modal
-                    title="新建"
+                    title="编辑"
                     visible={this.state.visible}
                     onOk={this.okHandler}
                     onCancel={this.hideModelHandler}
@@ -79,22 +79,6 @@ class AddModal extends Component {
                     cancelText="取消"
                 >
                     <Form layout="horizontal" onSubmit={this.okHandler}>
-                        <FormItem
-                            {...formItemLayout}
-                            label="父级角色"
-                        >
-                            {
-                                getFieldDecorator('nodeType', {
-                                    initialValue: 'Child',
-                                })(
-                                    <Radio.Group>
-                                        <Radio.Button value="Root">根节点</Radio.Button>
-                                        <Radio.Button value="Child">子节点</Radio.Button>
-                                        <Radio.Button value="Sibling">兄弟姐妹节点</Radio.Button>
-                                    </Radio.Group>,
-                                )
-                            }
-                        </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="name"
@@ -150,4 +134,4 @@ class AddModal extends Component {
     }
 }
 
-export default Form.create()(AddModal);
+export default Form.create()(EditModal);

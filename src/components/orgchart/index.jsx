@@ -1,22 +1,37 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Button, Tooltip, message, Modal } from 'antd';
+import { Card, Button, Tooltip, message, Modal, Icon } from 'antd';
 import { SwatchesPicker } from 'react-color';
 import OrgChart from 'orgchart.js';
 import 'orgchart.js/src/orgchart.css';
 import AddModal from './components/AddModal';
+import EditModal from './components/EditModal';
 import * as utils from './utils';
 import './css/vendor/font-awesome.min.css';
 import './style.less';
 const { confirm } = Modal;
 
 const TipIcon = ({
-    type, disabled = false, title, onClick = () => { },
-}) => (
+    type, disabled = false, title, onClick = () => { }
+}) => {
+    const propsConfig = {
+        disabled,
+        onClick: (e) => {
+            console.log('Button onClick');
+            if (!disabled) {
+                onClick();
+            } else {
+                e.stopPropagation();
+                message.warn('请选择组织机构节点')
+            }
+        }
+    };
+    return (
         <Tooltip title={title}>
-            <Button shape="circle" disabled={disabled} icon={type} onClick={onClick} />
+            <Icon type={type} {...propsConfig} />
         </Tooltip>
     );
+};
 
 export default class EditableOrgChart extends PureComponent {
     constructor(props) {
@@ -32,8 +47,7 @@ export default class EditableOrgChart extends PureComponent {
     }
     init() {
         const { orgChartData } = this.props;
-        const direction = 'r2l';
-        console.log(this.refChartContainer)
+        const direction = 't2b';
         const org = new OrgChart({
             direction,
             chartContainer: `#${this.refChartContainer.id}`,
@@ -92,11 +106,12 @@ export default class EditableOrgChart extends PureComponent {
         this.org.removeNodes(selectedNode.node);
     }
 
-    addNodes({ nodeType, name }, id) {
+    addNodes({ nodeType, name, ...param }, id) {
         const { selectedNode } = this.state;
         const nodeData = {
             name,
             id,
+            ...param,
         };
         if (this[`addNodesWith${nodeType}`]) {
             this[`addNodesWith${nodeType}`](nodeData, selectedNode);
@@ -106,7 +121,7 @@ export default class EditableOrgChart extends PureComponent {
     addNodesWithChild(nodeData, selectedNode) {
         const hasChild = selectedNode.node.parentNode.colSpan > 1;
         if (hasChild) {
-            const subNode = utils.closest(selectedNode, el => el.nodeName === 'TABLE').querySelector('.nodes').querySelector('.node');
+            const subNode = utils.closest(selectedNode.node, el => el.nodeName === 'TABLE').querySelector('.nodes').querySelector('.node');
             this.org.addSiblings(subNode, {
                 siblings: [nodeData],
             });
@@ -143,6 +158,35 @@ export default class EditableOrgChart extends PureComponent {
             }
         });
     }
+
+    handleEditSubmit = (values) => {
+        const { selectedNode } = this.state;
+
+        const { onEditNode } = this.props;
+        const param = {
+            ...JSON.parse(selectedNode.dataStr),
+            ...values,
+        };
+        onEditNode(param).then(data => {
+            if (data.success) {
+                selectedNode.node.dataset.source = JSON.stringify(param);
+                const content = selectedNode.node.querySelector('.content');
+                const title = selectedNode.node.querySelector('.title');
+                if (title) {
+                    title.textContent = param.name;
+                }
+                if (content) {
+                    content.textContent = param.title;
+                }
+                if (param.color) {
+                    utils.setOrgBgClor(selectedNode.node, param.color);
+                }
+            } else {
+                message.warn(`编辑节点失败~${data.message}`);
+            }
+        });
+    }
+
 
     handleDelNode = () => {
         const { selectedNode } = this.state;
@@ -195,20 +239,24 @@ export default class EditableOrgChart extends PureComponent {
             <div className="editable-orgchart-container">
                 <Card
                     title="组织机构编辑"
-                    cover={(<div>当前选中节点: {selectedNodeTitle}</div>)}
                     actions={
                         [
                             <AddModal isRoot={false} record={{}} onSubmit={this.handleAddSubmit} >
-                                <TipIcon disabled={disabled} type="file-add" title="添加" />
+                                <TipIcon disabled={disabled} type="file-add" title="选中节,添加" />
                             </AddModal>,
-                            <TipIcon onClick={this.handleDelNode} disabled={disabled} type="delete" title="删除" />,
-                            <TipIcon disabled={disabled} type="edit" title="编辑" />,
+                            <TipIcon onClick={this.handleDelNode} disabled={disabled} type="delete" title="删除选中节" />,
+                            <EditModal isRoot={false} record={{}} onSubmit={this.handleEditSubmit}>
+                                <TipIcon disabled={disabled} type="edit" title="编辑选中节" />
+                            </EditModal>,
                             <TipIcon onClick={this.handleShowColorPick} disabled={disabled} type="environment" title="更改选中节点颜色" />,
                         ]
                     }
                 >
-                    <div id="chart-container" ref={(ref) => { this.refChartContainer = ref }} />
+                    <div>当前选中节点: {selectedNodeTitle}</div>
                 </Card>
+                <div>
+                    <div id="chart-container" ref={(ref) => { this.refChartContainer = ref }} />
+                </div>
                 <Modal
                     title={'点击确定,可保存组织机构颜色'}
                     visible={colorPickerVisible}
@@ -222,17 +270,19 @@ export default class EditableOrgChart extends PureComponent {
     }
 }
 
-async function operateSuccess() {
+const operateSuccess = (type) => async (data) => {
     await setTimeout(() => { }, 2000);
+    message.success('success ~ ' + type);
+    console.log('operateSuccess', type, data);
     return {
         result: utils.getId(),
         success: true,
     };
 }
 const actions = {
-    onAddNode: operateSuccess,
-    onDelNode: operateSuccess,
-    onEditNode: operateSuccess,
+    onAddNode: operateSuccess('onAddNode'),
+    onDelNode: operateSuccess('onDelNode'),
+    onEditNode: operateSuccess('onEditNode'),
 };
 EditableOrgChart.propTypes = {
     orgChartData: PropTypes.object,
