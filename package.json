@@ -22,7 +22,7 @@
     "dva": "^2.1.0-0",
     "dva-loading": "^0.3.0",
     "history": "^4.7.2",
-    "orgchart.js": "^0.0.4",
+    "html2canvas": "^1.0.0-alpha.12",
     "query-string": "^5.0.0",
     "react": "^16.2.0",
     "react-color": "^2.14.1",

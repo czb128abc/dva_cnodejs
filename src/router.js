@@ -30,7 +30,7 @@ function RouterConfig({ history, app }) {
         <Switch>
           <Route exact path="/" component={IndexPage} />
           <Route exact path="/users" component={Users} />
-          <Route exact path="/job" component={require('./components/orgchart').default} />
+          <Route exact path="/job" component={require('./components/orgchart/EditableOrgChart').default} />
           <Route exact path="/good" component={CnodeApp} />
           <Route exact path="/d3" component={require('./routes/d3/index').default} />
         </Switch>
