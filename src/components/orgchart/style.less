@@ -1,5 +1,11 @@
 .editable-orgchart-container {
+    .oc-export-btn {
+        display: none;
+    }
     .orgchart {
+        min-width: 100%;
+        min-height: 500px;
+
         .arrow-icon {
             position: absolute;
             z-index: 10;
@@ -7,8 +13,19 @@
             height: 14px;
             width: 14px;
             color: rgba(217, 83, 79, 0.8);
-            left: 45%;
-            top: -6px;
+            left: 56.5px;
+            top: -8px;
+        }
+        & .node {
+            padding: 0;
+            margin: 4px;
+        }
+        & .node .title{
+            min-height: 40px;
+            height: auto;
+            overflow: auto;
+            text-overflow: inherit;
+            white-space: normal;
         }
 
         &.l2r .arrow-icon {

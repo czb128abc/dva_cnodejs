@@ -40,7 +40,7 @@ class AddModal extends Component {
             if (!err) {
                 const param = {
                     ...values,
-                }
+                };
                 if (!values.color) {
                     delete param.color;
                 }
@@ -54,7 +54,7 @@ class AddModal extends Component {
 
     handleColorChange = (color) => {
         const { form } = this.props;
-        form.setFieldsValue({ color: color.hex })
+        form.setFieldsValue({ color: color.hex });
     }
 
     render() {
@@ -136,7 +136,7 @@ class AddModal extends Component {
                                             <SwatchesPicker onChange={this.handleColorChange} />
                                         )}
                                     >
-                                        <Button shape="circle" icon="environment" ></Button>
+                                        <Button shape="circle" icon="environment" />
                                     </Popover>
 
                                 </Col>

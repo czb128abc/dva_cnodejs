@@ -45,6 +45,7 @@ export const bindEventHandler = (selector, type, fn, parentSelector) => {
 };
 
 export function setOrgBgClor(dom, color) {
+    // eslint-disable-next-line
     dom.querySelector('.title').style.backgroundColor = color;
     const content = dom.querySelector('.content');
     if (content) {
